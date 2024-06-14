@@ -1,0 +1,8 @@
+software version:
+  python-3.0 above
+  
+modules required:
+Flask
+Flask-MySQLdb
+Werkzeug
+  

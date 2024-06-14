@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #4A3072, #995460);
+}
+
+.container {
+    display: flex;
+    width: 800px;
+    height: 600px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    background-image: url('../images/rhythm.jpg');
+    background-repeat: no-repeat;
+    background-size: cover; 
+}
+
+.left-panel {
+    padding: 40px;
+    width: 50%;
+}
+
+.left-panel h2 {
+    margin-bottom: 20px;
+    color: #241349;
+}
+
+.left-panel a{
+    text-decoration: none;
+    background-color: #28a745;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.left-panel a:hover{
+    background-color: #241349;
+    color: #fff;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn.social-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn.facebook {
+    background-color: #3b5998;
+}
+
+.btn.google {
+    background-color: #dd4b39;
+}
+
+.right-panel {
+    width: 50%;
+    background: linear-gradient(135deg, #673E66, #995460);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.right-panel h1 {
+    margin-bottom: 20px;
+}
+
+.play-button {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.play-button .circle {
+    width: 100%;
+    height: 100%;
+    background-color: #3DCC85;
+    border-radius: 50%;
+    outline: 4px solid #3DCC85;
+    outline-offset: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.play-button .triangle {
+    width: 0;
+    height: 0;
+    border-left: 20px solid white;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* success message */
+
+.success {
+    display: flex;
+    align-items: center;
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    color: #3c763d;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.success .icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #3c763d;
+}
+
+.success .message {
+    font-size: 16px;
+    font-weight: 500;
+}
+    
+/* error message */
+.error {
+    display: flex;
+    align-items: center;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.error .icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #721c24;
+}
+
+.error .message {
+    font-size: 16px;
+    font-weight: 500;
+}

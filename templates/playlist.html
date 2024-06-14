@@ -1,0 +1,203 @@
+{% extends "dashboard.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    #playlist-container {
+        border-radius: 25px;
+        margin: auto;
+        padding: 20px;
+        box-shadow: 0 20px 50px #3d11839f;
+    }
+</style>
+{% endblock styles %}
+
+{% block title %}
+Playlist Page
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="container mt-5" id="playlist-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible mt-3" role="alert">
+                        <span id="mgs">{{ message }}</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %} 
+    <h1 class="text-center mb-4 text-light">Playlists</h1>
+    <button class="btn btn-Secondary  text-light mb-4" data-bs-toggle="modal" data-bs-target="#createPlaylistModal">Create Playlist</button>
+
+     <!-- Playlists list as accordion -->
+     <div class="accordion" id="playlistsAccordion">
+        {% for playlist in playlists %}
+        <div class="accordion-item">
+            <div class="accordion-header d-flex justify-content-between align-items-center" id="heading{{ loop.index }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                    {{ playlist.playlistname }}
+                </button>
+
+                <form action="/deleteplaylist" method="POST" class="delete-form">
+                    <input type="hidden" name="playlistId" value="{{ playlist.id }}">
+                    <button type="button" class="btn btn-danger delete-btn" aria-label="Close">Delete</button>
+                </form>
+                
+            </div>
+            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#playlistsAccordion">
+                <div class="accordion-body">
+                    <div id="songsList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        <!-- Songs will be dynamically loaded here -->
+                        {% for song in  playlistsong   %}
+                                {% if song and playlist.id == song.playlist_id %}
+                                    <div class="col">
+                                        <div class="card">
+                                            <img src="/static/images/rythmimg.jpg" class="card-img-top"  alt="Song Image">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{song.title}}</h5>
+                                                <p class="card-text">Artist: {{song.artist}}</p>
+                                                <p class="card-text">Album: {{song.album}}</p>
+                                                <button class="btn btn-primary play-btn" data-src="{{song.path}}">Play</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                        {% endfor %}
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    
+    <!-- Create Playlist Modal -->
+        <div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createPlaylistModalLabel">Create Playlist</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createPlaylistForm" action='/createplaylist' method='POST'>
+                            <div class="mb-3">
+                                <label for="playlistName" class="form-label">Playlist Name</label>
+                                <input type="text" class="form-control" id="playlistName" name="playlistname" required>
+                            </div>
+                            <button type="submit" id="submitBtn" class="btn btn-Secondary">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Delete Playlist Confirmation Modal -->
+        <div class="modal fade" id="deletePlaylistModal" tabindex="-1" aria-labelledby="deletePlaylistModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deletePlaylistModalLabel">Do you want to delete the playlist?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+        
+
+
+{% block script %}
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<script src="{{ url_for('static', filename='/js/playlist.js') }}"></script>
+
+<script>
+
+    $(document).ready(function() {
+        $('.delete-btn').on("click", function() {
+            // Show confirmation dialog
+            if (confirm("Are you sure you want to delete this playlist?")) {
+                // If user confirms, submit the form
+                $(this).closest('form').submit();
+            }
+        });
+    
+    
+         // Variable to store the currently playing audio element
+         let currentAudioPlayer = null;
+    
+        
+    
+    
+         // Function to handle play and pause functionality
+         function togglePlayPause(audioPlayer) {
+             if (audioPlayer.paused) {
+                 audioPlayer.play();
+             } else {
+                 audioPlayer.pause();
+             }
+         }
+     
+         // Play/pause song when play button is clicked
+         $(document).on('click', '.play-btn', function() {
+             const audioSrc = $(this).data('src');
+             
+            // Check if a song is currently playing
+            if (currentAudioPlayer) {
+             // Stop the currently playing song if there is one
+             currentAudioPlayer.pause();
+             currentAudioPlayer.currentTime = 2;
+             
+                 // Check if the clicked button corresponds to the currently playing song
+                 let url = currentAudioPlayer.src;
+                 let currentAudioPath = url.substring(url.indexOf("/uploads"));
+                 if (currentAudioPath === audioSrc) {
+                     // Toggle play/pause for the current song
+                     togglePlayPause(currentAudioPath);
+                     return;
+                 }
+             }
+                 
+                 // Create a new audio element
+                 const audioPlayer = new Audio(audioSrc);
+                 
+                 // Preload the audio file asynchronously
+                 audioPlayer.src = audioSrc;
+                 audioPlayer.load();
+     
+                 // Play the audio file
+                 audioPlayer.play();
+     
+                 // Update the currently playing audio element
+                 currentAudioPlayer = audioPlayer;
+     
+         });
+    });
+   
+
+
+</script>
+
+
+{% endblock script %}
